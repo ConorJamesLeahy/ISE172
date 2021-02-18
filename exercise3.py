@@ -16,6 +16,8 @@
 
 import pygame
 import random
+import time
+import numpy as np
 
 def main():
     # Write your pygame code (the "while" loop) in this "main" function.
@@ -33,30 +35,60 @@ def main():
         pygame.display.set_icon(icon) #Not sure if this works for macs :(
 
         #player
-        ballImg = pygame.image.load('ball.png')
-        ballX = random.randint(20, 590)
-        ballY = random.randint(20, 290)
-        ballY_change = random.randint(1,5)
-        ballX_change = random.randint(1,5)
+        ballImg = []
+        ballX = []
+        ballY = []
+        rad = []
+        ballX_change = []
+        ballY_change = []
+        num_of_balls = 10
+        XR = []
+        YR = []
 
-        #player2
-        ball2Img = pygame.image.load('ball.png')
-        ball2X = random.randint(20, 590)
-        ball2Y = random.randint(20, 290)
-        ball2Y_change = random.randint(1,5)
-        ball2X_change = random.randint(1,5)
+        for i in range(num_of_balls):
+            ballpic = pygame.image.load('ball.png')
+            R = random.randint(30, 100)
+            radi = R
+            ballpic = pygame.transform.scale(ballpic, (radi, radi))
+            rad.append(radi)
+            ballImg.append(ballpic)
 
+            Xb = (random.randint(40, 500))
+            Yb = (random.randint(40, 300))
+            ballX.append(Xb)
+            ballY.append(Yb)
+            XR.append((radi+Xb))
+            YR.append((radi+Yb))
+            ballY_change.append(random.randint(-5,5))
+            ballX_change.append(random.randint(-5,5))
+
+        # ballImgArray = np.array(ballImg)
+        xInts = [int(ballX[i]) for i in range(0, (num_of_balls - 1))]
+        yInts = [int(ballY[i]) for i in range(0, (num_of_balls - 1))]
+        radInts = [int(rad[i]) for i in range(0, (num_of_balls - 1))]
+        # ballX_changeArray = np.array(ballX_change)
+        # ballY_changeArray = np.array(ballY_change)
+        # num_of_balls = 10
+
+
+
+
+        #print(rad)
         orange = (255, 140 , 0)
 
         def ball(x,y):
-            screen.blit(ballImg, (x, y))
+            screen.blit(ballImg[i], (x, y))
+
         def ball2(z,t):
                 screen.blit(ball2Img, (z, t))
 
+        start_time = time.time()
         #Game Loop
         running = True
         while running:
 
+
+            # print(start_time)
             # Needs to be called after screen fill because it would overwrite
             screen.fill((255, 255, 255))
             #Arguments are red, green, blue
@@ -73,55 +105,53 @@ def main():
                 if event.type == pygame.QUIT:
                     running = False
 
+            for i in range(0, num_of_balls-1):
+                #Y changes
+                yInts[i] += ballY_change[i]
+                YR[i] += ballY_change[i]
+                if (yInts[i]) <= 20:
+                    yInts[i] = 20
+                    ballY_change[i] = random.randint(1,10)
+                elif (YR[i]) >= 480:
+                    radii = radInts[i]
+                    adjust = 480 - radii
+                    yInts[i] = adjust
+                    YR[i] = 480
+                    ballY_change[i] = -(random.randint(1,10))
+                ball(xInts[i], yInts[i])
 
-            ballY += ballY_change
-            if ballY <= 20:
-                ballY = 20
-                ballY_change = random.randint(1,10)
-            elif ballY >= 290:
-                ballY = 290
-                ballY_change = -(random.randint(1,10))
+                #X changes
+                xInts[i] += ballX_change[i]
+                XR[i] += ballX_change[i]
+                if (XR[i]) >= 780:
+                    radii = radInts[i]
+                    adjust = 780 - radii
+                    xInts[i] = adjust
+                    XR[i] = 780
+                    ballX_change[i] = -(random.randint(1,3))
+                elif (xInts[i]) <= 20:
+                    xInts[i] = 20
+                    ballX_change[i] = random.randint(1,3)
+                ball(xInts[i], yInts[i])
 
-            ball(ballX, ballY)
-
-
-
-            ballX += ballX_change
-            if ballX >= 590:
-                ballX = 590
-                ballX_change = -(random.randint(1,10))
-            elif ballX <= 20:
-                ballX = 20
-                ballX_change = random.randint(1,10)
-
-
-            ball(ballX, ballY)
-
-            ######### BALL2
-
-            ball2Y += ball2Y_change
-            if ball2Y <= 20:
-                ball2Y = 20
-                ball2Y_change = random.randint(1,5)
-            elif ball2Y >= 290:
-                ball2Y = 290
-                ball2Y_change = -(random.randint(1,5))
-
-            ball2(ball2X, ball2Y)
-
-
-
-            ball2X += ball2X_change
-            if ball2X >= 590:
-                ball2X = 590
-                ball2X_change = -(random.randint(1,5))
-            elif ball2X <= 20:
-                ball2X = 20
-                ball2X_change = random.randint(1,5)
-
-
-            ball2(ball2X, ball2Y)
-
+                #RADIUS CHANGES
+                newTime = time.time()
+                timer = newTime - start_time
+                print(timer)
+                if timer >= 1/30:
+                    print('here')
+                    radInts[i] -= 1
+                    if radInts[i] <= 10:
+                        print("Here2")
+                        radInts[i] = random.randint(30,100)
+                        yInts[i] = (random.randint(40, 500))
+                        xInts[i] = (random.randint(40, 300))
+                        YR[i] = yInts[i] + radInts[i]
+                        XR[i] = xInts[i] + radInts[i]
+                    newpic = pygame.transform.scale(ballpic, (radInts[i], radInts[i]))
+                    ballImg[i] = newpic
+                    start_time = time.time()
+                ball(xInts[i], yInts[i])
             pygame.display.update()
 
 
