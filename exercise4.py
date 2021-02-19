@@ -86,9 +86,13 @@ def main():
                 if event.key == pygame.K_LEFT:
                     print("Left arrow is pressed")
                     playerX_change = -6
+                    player =  pygame.image.load('run.png')
+                    PlayerImg = pygame.transform.scale(player, (64, 64))
                 if event.key == pygame.K_RIGHT:
                     print("Right arrow is pressed")
                     playerX_change = 6
+                    player =  pygame.image.load('run.png')
+                    PlayerImg = pygame.transform.scale(player, (64, 64))
                 if isJump == False:
                     if event.key == pygame.K_SPACE:
                         print("SPACE is pressed")
@@ -101,32 +105,35 @@ def main():
 
 
         playerX += playerX_change
-        playerY += playerY_change
+
         if playerX <= 0:
             playerX = 0
         elif playerX >= 836:
             playerX = 836
 
-        if isJump :
-            #calculate force
-            F = (1/2)*m*(v**2)
-            #change the Y coordinate
-            playerY_change = -F
+        # if isJump:
+        #     #calculate force
+        #     F = (1/2)*m*(v**2)
+        #     #change the Y coordinate
+        #     playerY_change = -F
+        #
+        #     #Decreasing going up and increasing negative on way down
+        #     v = v-1
+        #
+        #     #when object is at max height
+        #     if v<0:
+        #         #negative sign to switch velocity
+        #         m = -1
+        #     #Object reaches its original state
+        #     if playerY == 300:
+        #         isJump = False
+        #
+        #         v = 20
+        #         m = 1
+        #     playerY += playerY_change
 
-            #Decreasing going up and increasing negative on way down
-            v = v-1
 
-            #when object is at max height
-            if v<0:
-                #negative sign to switch velocity
-                m = -1
-            #Object reaches its original state
-            if playerY == 300:
-                isJump = False
-
-                v = 20
-                m = 1
-        # elif playerY <= 250 & playerY_change < 0 :
+        # # elif playerY <= 250 & playerY_change < 0 :
         #      playerY_change = -.5
         # elif playerY <= 220 & playerY_change < 0 :
         #      playerY_change = -.25
