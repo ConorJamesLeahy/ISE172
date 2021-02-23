@@ -53,11 +53,27 @@ def main():
     ball2X_change = random.randint(1,5)
 
     orange = (255, 140 , 0)
+    score1 = 0
+    score2 = 0
+    font = pygame.font.Font('freesansbold.ttf', 32)
+
+    textX = 10
+    textY = 10
+    textY2 = 40
+
+    def show_score1(x, y):
+        score_display1 = font.render("Score1 :" + str(score1), True, (0,0,0))
+        screen.blit(score_display1, (x, y))
+
+    def show_score2(x, y):
+        score_display2 = font.render("Score2 :" + str(score2), True, (0,0,0))
+        screen.blit(score_display2, (x, y))
+
 
     def ball(x,y):
         screen.blit(ballImg, (x, y))
     def ball2(z,t):
-            screen.blit(ball2Img, (z, t))
+        screen.blit(ball2Img, (z, t))
 
     #Game Loop
     running = True
@@ -84,9 +100,11 @@ def main():
         if ballY <= 20:
             ballY = 20
             ballY_change = random.randint(1,10)
+            score1 += 1
         elif ballY >= 290:
             ballY = 290
             ballY_change = -(random.randint(1,10))
+            score1 += 1
 
         ball(ballX, ballY)
 
@@ -96,9 +114,13 @@ def main():
         if ballX >= 590:
             ballX = 590
             ballX_change = -(random.randint(1,10))
+            score1 += 1
+            print(score1)
         elif ballX <= 20:
             ballX = 20
             ballX_change = random.randint(1,10)
+            score1 += 1
+            print(score1)
 
 
         ball(ballX, ballY)
@@ -109,24 +131,32 @@ def main():
         if ball2Y <= 20:
             ball2Y = 20
             ball2Y_change = random.randint(1,5)
+            score2 += 1
+            print(score2)
         elif ball2Y >= 290:
             ball2Y = 290
             ball2Y_change = -(random.randint(1,5))
+            score2 += 1
+            print(score2)
 
         ball2(ball2X, ball2Y)
 
-        
+
 
         ball2X += ball2X_change
         if ball2X >= 590:
             ball2X = 590
             ball2X_change = -(random.randint(1,5))
+            score2 += 1
         elif ball2X <= 20:
             ball2X = 20
             ball2X_change = random.randint(1,5)
+            score2 += 1
 
 
         ball2(ball2X, ball2Y)
+        show_score1(textX, textY)
+        show_score2(textX, textY2)
 
         pygame.display.update()
 
